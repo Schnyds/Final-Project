@@ -1,5 +1,3 @@
-# Final-Project
-group 5 final project
 <!DOCTYPE html>
 <html lang="en">
 <head>
