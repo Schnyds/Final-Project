@@ -1,3 +1,5 @@
+<!-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +46,7 @@
         .power-level {
             height: 100%;
             background-color: #00ff00;
-            width: 100%; /* Starts at full power */
+            width: 100%;
             transition: width 0.3s;
         }
 
@@ -169,19 +171,22 @@
             <p id="question"></p>
             <div id="choices"></div>
         </div>
-        <button id="next" onclick="nextQuestion()">Next</button>
+        <button id="next" onclick="nextEra()">Next Era</button>
         <p id="feedback"></p>
         <p id="score"></p>
     </div>
 
     <script>
         const questions = [
+            // Era 1: Ancient Egypt
             { era: "Ancient Egypt", question: "Who was the first female pharaoh of Egypt?", choices: ["Cleopatra", "Nefertiti", "Hatshepsut", "Nefertari"], correct: 2 },
-            { era: "Medieval Europe", question: "In what year did the Battle of Hastings take place?", choices: ["1066", "1215", "1347", "1453"], correct: 0 },
-            { era: "Renaissance Italy", question: "Who painted the Mona Lisa?", choices: ["Leonardo da Vinci", "Michelangelo", "Raphael", "Donatello"], correct: 0 },
+            { era: "Ancient Egypt", question: "What structure is the Sphinx associated with?", choices: ["Pyramids", "Colosseum", "Parthenon", "Stonehenge"], correct: 0 },
+            
+            // Add more eras with two questions each...
         ];
 
         let currentQuestionIndex = 0;
+        let questionsAnsweredCorrectly = 0;
         let score = 0;
         let powerLevel = 100;
 
@@ -203,18 +208,35 @@
             const questionData = questions[currentQuestionIndex];
             if (selected === questionData.correct) {
                 score += 10;
-                document.getElementById("feedback").textContent = "Correct! You've moved closer to the present.";
+                questionsAnsweredCorrectly += 1;
+                document.getElementById("feedback").textContent = "Correct! Answer another question to move forward.";
+                
+                if (questionsAnsweredCorrectly < 2) {
+                    currentQuestionIndex += 1; // Move to next question within the same era
+                    loadQuestion();
+                } else {
+                    document.getElementById("next").style.display = "block"; // Show 'next' button to proceed to the next era
+                }
             } else {
                 score -= 5;
                 powerLevel -= 10;
                 document.getElementById("feedback").textContent = "Incorrect! You've been transported to another era.";
-                currentQuestionIndex = Math.floor(Math.random() * questions.length);
+                currentQuestionIndex = Math.floor(Math.random() * questions.length); // Randomize era on incorrect answer
+                questionsAnsweredCorrectly = 0; // Reset correct answers count if answer is incorrect
+                loadQuestion();
             }
 
             document.getElementById("power-level").style.width = powerLevel + "%";
-            document.getElementById("next").style.display = "block";
             document.getElementById("score").textContent = `Score: ${score}`;
             checkGameOver();
+        }
+
+        function nextEra() {
+            currentQuestionIndex += 1; // Move to the first question of the next era
+            questionsAnsweredCorrectly = 0; // Reset correct answers counter
+            document.getElementById("next").style.display = "none"; // Hide the 'next' button
+            document.getElementById("feedback").textContent = "";
+            loadQuestion();
         }
 
         function checkGameOver() {
@@ -227,22 +249,11 @@
             }
         }
 
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex >= questions.length) {
-                showRank();
-            } else {
-                loadQuestion();
-                document.getElementById("next").style.display = "none";
-                document.getElementById("feedback").textContent = "";
-            }
-        }
-
         function showRank() {
             let rank;
-            if (score >= 30) rank = "Time Guardian";
-            else if (score >= 20) rank = "Master Historian";
-            else if (score >= 10) rank = "Chrono Explorer";
+            if (score >= 100) rank = "Time Guardian";
+            else if (score >= 80) rank = "Master Historian";
+            else if (score >= 60) rank = "Chrono Explorer";
             else rank = "Apprentice Time Traveler";
             
             document.getElementById("question").textContent = `Congratulations! You've completed the game as a ${rank}.`;
@@ -254,3 +265,4 @@
     </script>
 </body>
 </html>
+<-->
